@@ -1,28 +1,21 @@
 class Forca {
   constructor(palavraSecreta) {
     this.palavraSecreta = palavraSecreta;
-    for (let i = 0; i < palavraSecreta.length; i++) {
-      this.palavra.push("_")
-    }
+    PreencheEspaçosVazios(this.palavraSecreta, this.palavra);
   }
 
   letrasChutadas = [];
   vidas = 6;
   palavra = [];
-  vetorIndicesLetrasCertas = [];
-  posicaoAtualDaLetraCerta = 0;
-  palavraSecretaCortada = this.palavraSecreta;
-
+  
   chutar(letra) {
-    if (letra.length == 1) {
-      if (this.letrasChutadas.includes(letra) == false) {
-        this.letrasChutadas.push(letra)
-        if (this.palavraSecreta.includes(letra)) {
-          for (let i = 0; i < this.palavraSecreta.length; i++) {
-            if (this.palavraSecreta[i] == letra) {
-              this.palavra[i] = letra;
-            }
-          }
+    if (ChuteFoiUmaLetra(letra)) {
+      if (!LetraJaFoiChutada(letra, this.letrasChutadas)) {
+
+        AdicionaLetraAoVetor(letra, this.letrasChutadas);
+
+        if (PalavraPossuiLetra(this.palavraSecreta, letra)) {
+          PreencheLetrasCertasNaPalavra(letra, this.palavraSecreta, this.palavra);
         }
         else {
           this.vidas--;
@@ -35,7 +28,7 @@ class Forca {
     if (this.vidas == 0) {
       return "perdeu"
     }
-    else if (this.palavra.join('') == this.palavraSecreta && this.vidas > 0) {
+    else if (TemVidaEPalvraEstaCerta(this.vidas, this.palavra, this.palavraSecreta)) {
       return "ganhou"
     }
     else {
@@ -51,6 +44,31 @@ class Forca {
     }
   }
 }
-
-
+ChuteFoiUmaLetra = (letra) => {
+  return letra.length == 1;
+}
+LetraJaFoiChutada = (letra, letrasChutadas) => {
+  return letrasChutadas.includes(letra) == true;
+}
+AdicionaLetraAoVetor = (letra, vetorAlvo) => {
+  vetorAlvo.push(letra);
+}
+PalavraPossuiLetra = (palavra, letra) => {
+  return palavra.includes(letra);
+}
+PreencheLetrasCertasNaPalavra = (letra, palavraSecreta, palavraAlvo) => {
+  for (let i = 0; i < palavraSecreta.length; i++) {
+    if (palavraSecreta[i] == letra) {
+      palavraAlvo[i] = letra;
+    }
+  }
+}
+PreencheEspaçosVazios = (palavraSecreta, palavra) => {
+  for (let i = 0; i < palavraSecreta.length; i++) {
+    palavra.push("_")
+  }
+}
+TemVidaEPalvraEstaCerta = (vidas, palavra, palavraSecreta) =>{
+ return palavra.join('') == palavraSecreta && vidas > 0;
+}
 module.exports = Forca;
