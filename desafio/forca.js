@@ -14,16 +14,20 @@ class Forca {
   palavraSecretaCortada = this.palavraSecreta;
 
   chutar(letra) {
-    this.letrasChutadas.push(letra)
-    if (this.palavraSecreta.includes(letra)) {
-      for (let i = 0; i < this.palavraSecreta.length; i++) {
-        if (this.palavraSecreta[i] == letra) {
-          this.palavra[i] = letra;
+    if (letra.length == 1) {
+      if (this.letrasChutadas.includes(letra) == false) {
+        this.letrasChutadas.push(letra)
+        if (this.palavraSecreta.includes(letra)) {
+          for (let i = 0; i < this.palavraSecreta.length; i++) {
+            if (this.palavraSecreta[i] == letra) {
+              this.palavra[i] = letra;
+            }
+          }
+        }
+        else {
+          this.vidas--;
         }
       }
-    }
-    else {
-      this.vidas--;
     }
   }
 
@@ -31,7 +35,7 @@ class Forca {
     if (this.vidas == 0) {
       return "perdeu"
     }
-    else if (this.palavra.join('') == this.palavraSecreta) {
+    else if (this.palavra.join('') == this.palavraSecreta && this.vidas > 0) {
       return "ganhou"
     }
     else {
